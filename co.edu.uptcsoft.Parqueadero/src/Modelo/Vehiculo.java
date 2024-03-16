@@ -4,8 +4,8 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	
 	//atributos
 	
-	private String placa,ubicacion,tiempo,horaEntrada,horaSalida,codigo;
-	private int costoHora;
+	private String tipo, placa,ubicacion,horaEntrada,horaSalida;
+	private int costoHora,codigo;
 	
 	
 	
@@ -13,46 +13,34 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	
 	@Override
 	public String toString() {
-		return "Vehiculo [placa=" + placa + ", ubicacion=" + ubicacion + ", tiempo=" + tiempo + ", horaEntrada="
+		return "Vehiculo [tipo=" + tipo + " placa=" + placa + ", ubicacion=" + ubicacion + ","+ "horaEntrada="
 				+ horaEntrada + ", horaSalida=" + horaSalida + ", codigo=" + codigo + ", costoHora=" + costoHora + "]";
 	}
 	
 	//constructores
 	
-
-	public Vehiculo(String placa, String ubicacion, String tiempo, String horaEntrada, String horaSalida,
+	public Vehiculo(String tipo, String placa, String ubicacion, String horaEntrada, String horaSalida, int codigo,
 			int costoHora) {
 		super();
-		this.placa = placa;
-		this.ubicacion = ubicacion;
-		this.tiempo = tiempo;
-		this.horaEntrada = horaEntrada;
-		this.horaSalida = horaSalida;
-		this.costoHora = costoHora;
-	}
-	
-	
-
-	public Vehiculo(String placa, String ubicacion, String horaEntrada, int costoHora) {
-		super();
+		this.tipo= tipo;
 		this.placa = placa;
 		this.ubicacion = ubicacion;
 		this.horaEntrada = horaEntrada;
+		this.horaSalida = horaSalida;
+		this.codigo = codigo;
 		this.costoHora = costoHora;
 	}
-	
-	public Vehiculo(String ubicacion, String tiempo, String horaEntrada, String horaSalida, int costoHora) {
+
+	public Vehiculo(String tipo, String ubicacion, String horaEntrada, String horaSalida, int codigo, int costoHora) {
 		super();
+		this.tipo= tipo;
 		this.ubicacion = ubicacion;
-		this.tiempo = tiempo;
 		this.horaEntrada = horaEntrada;
 		this.horaSalida = horaSalida;
+		this.codigo = codigo;
 		this.costoHora = costoHora;
 	}
-	
-	public Vehiculo() { }
 
-	
 	//getters and setters
 
 	
@@ -67,12 +55,6 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	}
 	public void setUbicacion(String ubicacion) {
 		this.ubicacion = ubicacion;
-	}
-	public String getTiempo() {
-		return tiempo;
-	}
-	public void setTiempo(String tiempo) {
-		this.tiempo = tiempo;
 	}
 	public String getHoraEntrada() {
 		return horaEntrada;
@@ -93,11 +75,11 @@ public class Vehiculo implements Comparable <Vehiculo> {
 		this.costoHora = costoHora;
 	}
 
-	public String getCodigo() {
+	public int getCodigo() {
 		return codigo;
 	}
 
-	public void setCodigo(String codigo) {
+	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 

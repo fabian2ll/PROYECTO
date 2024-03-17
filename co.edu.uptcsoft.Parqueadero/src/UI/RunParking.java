@@ -11,7 +11,7 @@ import Logica.Sistema;
 import Modelo.Contrato;
 import Modelo.Usuario;
 import Modelo.Vehiculo;
-
+//contra repositorio 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
 public class RunParking {
 
 	
@@ -27,11 +27,19 @@ public class RunParking {
 	public static LocalTime hora;
 	public static int costoMinutoCarroMoto;
 	public static int costoMinutoBici;
-	public static LinkedHashSet <Vehiculo> vehiculos = new LinkedHashSet<Vehiculo>();
+	public static LinkedHashSet <Vehiculo> vehiculosTotales = new LinkedHashSet<Vehiculo>();
+	public static LinkedHashSet <Vehiculo> vehiculosPresentes = new LinkedHashSet<Vehiculo>();
 	public static LinkedHashSet <Contrato> contratos = new LinkedHashSet<Contrato>(); 
 	static ImageIcon imagen = new ImageIcon("co.edu.uptcsoft.Parqueadero\\src\\UI\\icono.png");
 
 	public static void main(String[] args){
+		
+		Vehiculo car= new Vehiculo (null,"asd", " ", hora, hora, codigo, codigo );
+		Vehiculo car1 = new Vehiculo (null, "asd", " ", hora, hora, codigo, codigo);
+		vehiculosPresentes.add(car1);
+		vehiculosPresentes.add(car);
+		System.out.println(vehiculosPresentes);
+		
 		
 
 		 JOptionPane.showMessageDialog(null, "Bienvenido, para comenzar es necesario que el jefe del establecimiento se registre", "Inicio Sistema", 0, imagen);
@@ -47,6 +55,9 @@ public class RunParking {
 		espaciosMotos=new int [numMoto];
 		
 
+		//tarifas 
+		costoMinutoCarroMoto= asignacionTarifasCarrosMotos();
+		costoMinutoBici= asignacionTarifaBici();
 	     //mostrar matriz
 	     llenarArrays();
 	     
@@ -69,11 +80,11 @@ public class RunParking {
 			op=menu().charAt(0);
 		switch (op) {
 		case 'E': 
-			ingresoVehiculo();
+			JOptionPane.showMessageDialog(null, ingresoVehiculo(), "Verificacion", 0, imagen);
 		    break;
 		case 'I':		
 			break;
-		case 'R': 
+		case 'R':
 			
 			String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
 			int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
@@ -97,15 +108,17 @@ public class RunParking {
 			
 			
 			break;
-		case 4: 
+		case 'S': 
 			switch (opcionesBusqueda()) {
 			case 1:
-				int codigoBuscado =Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-				
+				int codigoBuscado =Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su codigo", "Busqueda Codigo", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
+				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoCodigo(vehiculosPresentes, contratos, codigoBuscado, costoMinutoBici), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
+				sistema.actualizarArray(espaciosBicicletas, espaciosMotos, espaciosCarros);
 				break;
 			case 2: 
-				String placaBuscada = (String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
-				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoPlaca(vehiculos, contratos, placaBuscada, costoMinutoCarroMoto), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
+				String placaBuscada = (String) JOptionPane.showInputDialog(null, "Escriba su placa", "Busqueda Placa", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
+				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoPlaca(vehiculosPresentes, contratos, placaBuscada, costoMinutoCarroMoto), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
+				sistema.actualizarArray(espaciosBicicletas, espaciosMotos, espaciosCarros);
 			break;
 		}
 		}
@@ -241,9 +254,10 @@ public static void  creacionObjeto (int opcion) {
 		codigo++;
 		espaciosDisponiblesBicicletas();
 		 hora= LocalTime.now();
-		
-		Vehiculo bicicleta = new Vehiculo (opciones[0], AsignacionBici(), hora,hora, codigo,50);
-		vehiculos.add(bicicleta);
+		 JOptionPane.showMessageDialog(null, "Codigo: " + codigo, "Entrega Codigo", 0, imagen);
+		Vehiculo bicicleta = new Vehiculo (opciones[0], sistema.AsignacionBici(espaciosBicicletas), hora,hora, codigo,0);
+		vehiculosPresentes.add(bicicleta);
+		vehiculosTotales.add(bicicleta);
 		
 		break;
 	case 1: 
@@ -252,8 +266,9 @@ public static void  creacionObjeto (int opcion) {
 		hora= LocalTime.now();
 		
 		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
-		Vehiculo moto = new Vehiculo (opciones[1],placa, AsignacionMoto(), hora, hora, codigo, 100 );
-		vehiculos.add(moto);
+		Vehiculo moto = new Vehiculo (opciones[1],placa, sistema.AsignacionMoto(espaciosMotos), hora, hora, codigo, 0 );
+		vehiculosPresentes.add(moto);
+		vehiculosTotales.add(moto);
 		break;
 	case 2: 
 		espaciosDisponiblesCarros();
@@ -261,8 +276,9 @@ public static void  creacionObjeto (int opcion) {
 		hora= LocalTime.now();
 		
 		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
-		Vehiculo carro = new Vehiculo (opciones[2], placa, AsignacionCarro(), hora, hora, codigo, 150);
-		vehiculos.add(carro);
+		Vehiculo carro = new Vehiculo (opciones[2], placa, sistema.AsignacionCarro(espaciosCarros), hora, hora, codigo, 150);
+		vehiculosPresentes.add(carro);
+		vehiculosTotales.add(carro);
 		break;
 		
 	}
@@ -292,59 +308,43 @@ public static void espaciosDisponiblesCarros() {
 	}
 	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Carros", 0, imagen);
 }
-public static String AsignacionCarro() {
-	String ubicacion= " ";
-	if (espaciosCarros[espaciosCarros.length-1]==1) {
-		System.out.println("no hay");
-	}
-	for (int i=0; i<espaciosCarros.length; i++) {
-		if (espaciosCarros[i]==0) {
-			ubicacion = "A"+i;
-			espaciosCarros[i]=1;
-		} 
-		if ((i=espaciosCarros.length-1)==1) {
-			return "No existe un espacio disponible";
+public static int asignacionTarifasCarrosMotos() {
+	int precio =0 ;
+	do{
+		try {
+			precio = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el precio para CARROS y MOTOS " , "Asignacion tarifas", 0, imagen, null, null));
+			if (precio < 0) {
+				//2observacion=true;
+				throw new Exception("Error: Ingresa un numero positivo");
+			}
+		} catch (NumberFormatException e) {
+			//observacion=true;
+			JOptionPane.showMessageDialog(null, "Error: Ingresa un numero valido", "Error", JOptionPane.ERROR_MESSAGE);
+			continue;
+		} catch (Exception e){
+			//observacion=true;
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			continue;
 		}
-	}
-	return ubicacion;
+		return precio;
+	}while( true );
 }
-public static String AsignacionBici() {
-	String ubicacion = null;
-	if (espaciosBicicletas[espaciosBicicletas.length-1]==1) {
-		System.out.println("no hay");
-	}
-	for (int i=0; i<espaciosBicicletas.length; i++) {
-		if (espaciosBicicletas[i]==0) {
-			ubicacion = "B"+i;
-			espaciosBicicletas[i]=1;
-			break;
-		} 
-		/*if ((i=espaciosBicicletas.length-1)==1) {
-			return "No existe un espacio disponible";
-		}*/
-		
-	}
-	return ubicacion;
-}
-public static String AsignacionMoto() {
-	String ubicacion= null;
-	/*if (espaciosMotos[espaciosMotos.length-1]==1) {
-		return "no hay";
-	}*/
-	for (int i=0; i<espaciosMotos.length; i++) {
-		if (espaciosMotos[i]==0) {
-			espaciosMotos[i]=1;
-			ubicacion = "M" + i;
-			break;
-			//ubicacion = "M"+(i+1);
-			//espaciosMotos[i]=1;
+public static int asignacionTarifaBici() {
+	int precio=0;
+	do{
+		try {
+		precio = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el precio para BICICLETAS " , "Asignacion tarifas", 0, imagen, null, null));
+			if (precio < 0) {
+				throw new Exception("Error: Ingresa un numero positivo");
+			}
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Error: Ingresa un numero valido", "Error", JOptionPane.ERROR_MESSAGE);
+			continue;
+		} catch (Exception e){
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			continue;
 		}
-	}
-
-		/*if ((i=espaciosMotos.length-1)==1) {
-			return "No existe un espacio disponible";
-	}*/
-
-	return ubicacion;
+		return precio;
+	}while(true);
 }
 }

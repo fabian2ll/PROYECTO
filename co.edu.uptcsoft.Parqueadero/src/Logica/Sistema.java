@@ -8,35 +8,49 @@ import Modelo.Usuario;
 import Modelo.Vehiculo;
 
 public class Sistema {
-	
+	int posicion;
+	String tipo;
 	public int retirarVehiculoPlaca (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, String placa, int costoMinuto) {
 		int precio=0;
 		long tiempo1, tiempo2;
+	
 		for (Vehiculo vehiculo: vehiculos) {
-			if (vehiculo.getPlaca().compareTo(placa)==0) {
+			if (placa.compareTo(vehiculo.getPlaca())==0) {
 				LocalTime horaSalida = LocalTime.now();
 				vehiculo.setHoraSalida(horaSalida);
 				tiempo1 = vehiculo.getHoraEntrada().getHour()*60 + vehiculo.getHoraEntrada().getMinute();
 				tiempo2= horaSalida.getHour() *60 + horaSalida.getMinute();
 				precio = (int) ((tiempo2-tiempo1)*costoMinuto);
 				vehiculo.setCosto(precio);
+				posicion = Integer.parseInt(vehiculo.getUbicacion().substring(1));
+				tipo = vehiculo.getTipo();
+			} else {
+				for (Contrato contrato: contratos) {
+					if (contrato.getPlaca().compareTo(placa)==0) {
+						precio=0;
+					}
+				}
 			}
 		} 
-			
-		
 		return precio;
 	}
-	public int retirarVehiculoCodigo (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, String placa, int costoMinuto) {
+	public int retirarVehiculoCodigo (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, int codigo, int costoMinuto) {
 		int precio=0;
 		long tiempo1, tiempo2;
 		for (Vehiculo vehiculo: vehiculos) {
-			if (vehiculo.getPlaca().compareTo(placa)==0) {
+			if (codigo == vehiculo.getCodigo()) {
 				LocalTime horaSalida = LocalTime.now();
 				vehiculo.setHoraSalida(horaSalida);
 				tiempo1 = vehiculo.getHoraEntrada().getHour()*60 + vehiculo.getHoraEntrada().getMinute();
 				tiempo2= horaSalida.getHour() *60 + horaSalida.getMinute();
 				precio = (int) ((tiempo2-tiempo1)*costoMinuto);
 				vehiculo.setCosto(precio);
+				posicion = Integer.parseInt(vehiculo.getUbicacion().substring(1));
+				tipo = vehiculo.getTipo();
+			} for (Contrato contrato: contratos) {
+					if (contrato.getPlaca().compareTo(vehiculo.getPlaca())==0) {
+						precio=0;
+					}
 			}
 		}
 		return precio;
@@ -45,4 +59,76 @@ public class Sistema {
  public boolean verificarUsuario (Usuario jefe, String nombre, int contraseña) {
 	 return jefe.getUsuario().compareTo(nombre)== 0 && jefe.getContraseña() ==contraseña;
  }
+ public  String AsignacionCarro(int [] espaciosCarros) {
+		String ubicacion= " ";
+		if (espaciosCarros[espaciosCarros.length-1]==1) {
+			System.out.println("no hay");
+		}
+		for (int i=0; i<espaciosCarros.length; i++) {
+			if (espaciosCarros[i]==0) {
+				ubicacion = "A"+i;
+				espaciosCarros[i]=1;
+			} 
+			if ((i=espaciosCarros.length-1)==1) {
+				return "No existe un espacio disponible";
+			}
+		}
+		return ubicacion;
+	}
+	public  String AsignacionBici(int [] espaciosBicicletas) {
+		String ubicacion = null;
+
+		if (espaciosBicicletas[espaciosBicicletas.length-1]==1) {
+			System.out.println("no hay");
+		}
+		for (int i=0; i<espaciosBicicletas.length; i++) {
+			if (espaciosBicicletas[i]==0) {
+				ubicacion = "B"+i;
+				espaciosBicicletas[i]=1;
+				break;
+			} 
+		
+		
+			/*if ((i=espaciosBicicletas.length-1)==1) {
+				return "No existe un espacio disponible";
+			}*/
+			
+		} 
+		return ubicacion;
+	}
+	public  String AsignacionMoto(int [] espaciosMotos) {
+		String ubicacion= null;
+		/*if (espaciosMotos[espaciosMotos.length-1]==1) {
+			return "no hay";
+		}*/
+		for (int i=0; i<espaciosMotos.length; i++) {
+			if (espaciosMotos[i]==0) {
+				espaciosMotos[i]=1;
+				ubicacion = "M" + i;
+				break;
+				//ubicacion = "M"+(i+1);
+				//espaciosMotos[i]=1;
+			}
+		}
+
+			/*if ((i=espaciosMotos.length-1)==1) {
+				return "No existe un espacio disponible";
+		}*/
+
+		return ubicacion;
+	}
+	public  void actualizarArray (int [] espaciosBici, int[] espaciosMotos, int[] espaciosCarros) {
+		switch (tipo) {
+		case "Moto":
+			espaciosMotos[posicion]=0;
+			break;
+		case "Bicileta":
+			espaciosBici[posicion]=0;
+			break;
+		case "Automovil":
+			espaciosCarros[posicion]=0;
+			break;
+		}
+			
+	}
 }

@@ -1,8 +1,9 @@
 package Modelo;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
-public class Vehiculo implements Comparable<Vehiculo> {
+public class Vehiculo  {
 	
 	//atributos
 	private String tipo, placa,ubicacion;
@@ -12,6 +13,29 @@ public class Vehiculo implements Comparable<Vehiculo> {
 	
 	
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(placa);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vehiculo other = (Vehiculo) obj;
+		return Objects.equals(placa, other.placa);
+	}
+
+	@Override
+	public String toString() {
+		return "Vehiculo [tipo=" + tipo + ", placa=" + placa + ", ubicacion=" + ubicacion + ", costo=" + costo
+				+ ", codigo=" + codigo + ", horaEntrada=" + horaEntrada + ", horaSalida=" + horaSalida + "]";
+	}
+
 	public Vehiculo(String tipo, String placa, String ubicacion, LocalTime horaEntrada, LocalTime horaSalida, int codigo,
 			int costo) {
 		super();
@@ -35,9 +59,19 @@ public class Vehiculo implements Comparable<Vehiculo> {
 		}
 
 	//getters and setters
+	
+	
 	public String getPlaca() {
 		return placa;
 	}
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
 	public void setPlaca(String placa) {
 		this.placa = placa;
 	}
@@ -75,7 +109,7 @@ public class Vehiculo implements Comparable<Vehiculo> {
 	}
 
 	//CompareTo
-	public int compareTo(Vehiculo o) {		
+	/*public int compareTo(Vehiculo o) {		
 		return this.getPlaca().compareTo(o.getPlaca());
-	}	
+	}	*/
 }

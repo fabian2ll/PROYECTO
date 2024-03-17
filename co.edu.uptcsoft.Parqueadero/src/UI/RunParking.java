@@ -34,14 +34,6 @@ public class RunParking {
 
 	public static void main(String[] args){
 		
-		Vehiculo car= new Vehiculo (null,"asd", " ", hora, hora, codigo, codigo );
-		Vehiculo car1 = new Vehiculo (null, "asd", " ", hora, hora, codigo, codigo);
-		vehiculosPresentes.add(car1);
-		vehiculosPresentes.add(car);
-		System.out.println(vehiculosPresentes);
-		
-		
-
 		 JOptionPane.showMessageDialog(null, "Bienvenido, para comenzar es necesario que el jefe del establecimiento se registre", "Inicio Sistema", 0, imagen);
 		 JOptionPane.showMessageDialog(null, registroJefe(), "Inicio Sistema", 0, imagen);
 			

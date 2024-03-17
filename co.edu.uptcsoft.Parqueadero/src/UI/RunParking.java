@@ -26,36 +26,37 @@ public class RunParking {
 	public static int codigo=0;
 	public static LocalTime hora;
 	public static LinkedHashSet <Vehiculo> vehiculos = new LinkedHashSet<Vehiculo>();
-	public static LinkedHashSet <Contrato> contratos = new LinkedHashSet <Contrato>(); 
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static LinkedHashSet <Contrato> contratos = new LinkedHashSet<Contrato>(); 
+	static ImageIcon imagen = new ImageIcon("co.edu.uptcsoft.Parqueadero\\src\\UI\\icono.png");
 
-		 
-		 JOptionPane.showMessageDialog(null, "Bienvenido, para comenzar es necesario que el jefe del establecimiento se registre", "Inicio Sistema", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
-		 JOptionPane.showMessageDialog(null, registroJefe(), "Inicio Sistema", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+	public static void main(String[] args){
+		
+
+		 JOptionPane.showMessageDialog(null, "Bienvenido, para comenzar es necesario que el jefe del establecimiento se registre", "Inicio Sistema", 0, imagen);
+		 JOptionPane.showMessageDialog(null, registroJefe(), "Inicio Sistema", 0, imagen);
 			
-		 //registro de espacios en el parqueadero 
-		 
-		 int numBici = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el numero de espacios para BICICLETAS ", "Creacion de espacios", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-		 espaciosBicicletas= new int[numBici];
-		 int numCarro = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el numero de espacios para AUTOMOVILES ", "Creacion de espacios", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-	     espaciosCarros = new int[numCarro];
-	     int numMoto = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el numero de espacios para MOTOS ", "Creacion de espacios", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-	     espaciosMotos = new int[numMoto];
-	    
+		 //registro de espacios en el parqueadero  
+
+		int numBici = verificarCantidadEspacios("BICICLETAS");
+		espaciosBicicletas= new int[numBici];
+		int numCarro = verificarCantidadEspacios("CARROS");
+		espaciosCarros=new int [numCarro];
+		int numMoto = verificarCantidadEspacios("MOTOS");
+		espaciosMotos=new int [numMoto];
+		
+
 	     //mostrar matriz
 	     llenarArrays();
 	     
 	    
-	     //eleccion de trabajador
-		int opcion = JOptionPane.showConfirmDialog(null, "Usted mismo va a trabajar?", "Trabajador", JOptionPane.YES_NO_OPTION, 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+	    //eleccion de trabajador
+		int opcion = JOptionPane.showConfirmDialog(null, "Usted mismo va a trabajar?", "Trabajador", JOptionPane.YES_NO_OPTION, 0, imagen);
 		switch (opcion) {
 		case 0: 
 			trabajador =jefe;
 			break;
 		case 1: 
-			JOptionPane.showMessageDialog(null, registroTrabajador(), "Inicio Sistema", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+			JOptionPane.showMessageDialog(null, registroTrabajador(), "Inicio Sistema", 0, imagen);
 			break;
 		}
 	
@@ -83,8 +84,8 @@ public class RunParking {
 			break;
 		case 3: 
 			
-			String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
-			int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
+			String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
+			int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
 			if (sistema.verificarUsuario(jefe, nombre, contraseña)==true) {
 				switch (menuAdministrativo()) {
 				case 1:
@@ -113,28 +114,82 @@ case 4:
 
 	}
 
+	public static int verificarCantidadEspacios(String tipoVehiculo) {
+		int cantVehiculo = 0;
+		do{
+			try {
+				cantVehiculo = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el numero de espacios para " + tipoVehiculo, "Creacion de espacios", 0, imagen, null, null));
+				if (cantVehiculo < 0) {
+					throw new Exception("Error: Ingresa un numero positivo");
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Error: Ingresa un numero valido", "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			} catch (Exception e){
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+			return cantVehiculo;
+		}while(true);
+	}
+
 	public static int menu() {
-		int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Ingreso de vehiculo \n 2.Inscripcion de mensualidades \n 3. Registro de vehiculos estacionados \n 4.Retirar vehiculo  ", "Menu de Opciones", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
+		int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Ingreso de vehiculo \n 2.Inscripcion de mensualidades \n 3. Registro de vehiculos estacionados \n 4.Retirar vehiculo  ", "Menu de Opciones", 0, imagen, null, null));
 	return opcionMenu;
 	}
 	
 	public static String registroJefe() {
+		String nombre = null;
+		int contraseña = 0;
+		do{
+			try {
+				nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
+				contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
+				if (nombre == null || nombre.isEmpty() || contraseña <= 0) {
+					throw new Exception("Error: Usuario o contraseña invalidos");
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Error: Ingresa una contraseña valida", "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			} catch (Exception e){
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+			
+			jefe = new Usuario(nombre, contraseña);
+			return "registro exitoso";
+			
+		}while(true);
 		
-		String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
-		int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-		jefe= new Usuario(nombre,contraseña);
-		return "registro exitoso";
 	}
 	
 	public static String registroTrabajador() {
-		String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
-		int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-		trabajador= new Usuario(nombre,contraseña);
-		return "registro exitoso";
+		String nombre = null;
+		int contraseña = 0;
+		do{
+			try {
+				nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
+				contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
+				if (nombre == null || nombre.isEmpty() || contraseña <= 0) {
+					throw new Exception("Error: Usuario o contraseña invalidos");
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Error: Ingresa una contraseña valida", "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			} catch (Exception e){
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+			
+			trabajador = new Usuario(nombre, contraseña);
+			return "registro exitoso";
+			
+		}while(true);
 	}
+
 	public static String ingresoVehiculo() {
 		
-		int opcion = JOptionPane.showOptionDialog(null, "Seleccione el tipo de vehiculo", "Tipo de Vehiculo", 0,JOptionPane.QUESTION_MESSAGE, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), opciones,  "Bicicleta");
+		int opcion = JOptionPane.showOptionDialog(null, "Seleccione el tipo de vehiculo", "Tipo de Vehiculo", 0,JOptionPane.QUESTION_MESSAGE, imagen, opciones,  "Bicicleta");
 		creacionObjeto(opcion);
 		return "Ingreso exitoso";
 	}
@@ -143,6 +198,8 @@ case 4:
 		
 		
 		return "Registro exitoso";
+		
+		
 		
 	}
 	public static void llenarArrays() {
@@ -168,11 +225,11 @@ case 4:
 			}
 			espaciosMostrar += " \n";
 		}
-		JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+		JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios", 0, imagen);
 	}*/
 	
 public static int menuAdministrativo() {
-	int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Vehiculos ingresados \n 2.Contratos", "Menu de Opciones Administrativas", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
+	int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Vehiculos ingresados \n 2.Contratos", "Menu de Opciones Administrativas", 0, imagen, null, null));
 
 	return opcionMenu;
 }
@@ -192,7 +249,7 @@ public static void  creacionObjeto (int opcion) {
 		codigo++;
 		hora= LocalTime.now();
 		horaLlegada = hora.toString();
-		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
+		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo moto = new Vehiculo (opciones[1],placa, AsignacionMoto(), horaLlegada, " ", codigo, 100 );
 		vehiculos.add(moto);
 		break;
@@ -201,7 +258,7 @@ public static void  creacionObjeto (int opcion) {
 		codigo++;
 		hora= LocalTime.now();
 		horaLlegada = hora.toString();
-		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
+		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo carro = new Vehiculo (opciones[2], placa, AsignacionCarro(), horaLlegada, " ", codigo, 150);
 		vehiculos.add(carro);
 		break;
@@ -214,7 +271,7 @@ public static void espaciosDisponiblesBicicletas() {
 		espaciosMostrar += espaciosBicicletas[i];
 		espaciosMostrar+= "  ";
 	}
-	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Bicicletas", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Bicicletas", 0, imagen);
 }
 public static void espaciosDisponiblesMotos() {
 	String espaciosMostrar = " ";
@@ -222,7 +279,7 @@ public static void espaciosDisponiblesMotos() {
 		espaciosMostrar += espaciosMotos[i];
 		espaciosMostrar+= "  ";
 	}
-	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Motos", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Motos", 0, imagen);
 }
 
 public static void espaciosDisponiblesCarros() {
@@ -231,7 +288,7 @@ public static void espaciosDisponiblesCarros() {
 		espaciosMostrar += espaciosCarros[i];
 		espaciosMostrar+= "  ";
 	}
-	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Carros", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"));
+	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Carros", 0, imagen);
 }
 public static String AsignacionCarro() {
 	String ubicacion= " ";

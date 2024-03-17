@@ -1,16 +1,12 @@
 package Modelo;
 
-public class Vehiculo implements Comparable <Vehiculo> {
+public class Vehiculo implements Comparable<Vehiculo> {
 	
 	//atributos
-	
-	private String tipo, placa,ubicacion,horaEntrada,horaSalida;
-	private int costoHora,codigo;
-	
-	
-	
+	private String tipo, placa, ubicacion, horaEntrada, horaSalida;
+	private int costoHora, codigo;
+
 	//to String
-	
 	@Override
 	public String toString() {
 		return "Vehiculo [tipo=" + tipo + " placa=" + placa + ", ubicacion=" + ubicacion + ","+ "horaEntrada="
@@ -18,7 +14,6 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	}
 	
 	//constructores
-	
 	public Vehiculo(String tipo, String placa, String ubicacion, String horaEntrada, String horaSalida, int codigo,
 			int costoHora) {
 		super();
@@ -42,8 +37,6 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	}
 
 	//getters and setters
-
-	
 	public String getPlaca() {
 		return placa;
 	}
@@ -84,15 +77,7 @@ public class Vehiculo implements Comparable <Vehiculo> {
 	}
 
 	//CompareTo
-	public int compareTo(Vehiculo o) {
-		
+	public int compareTo(Vehiculo o) {		
 		return this.getPlaca().compareTo(o.getPlaca());
-	}
-
-
-
-	
-	
-
-	
+	}	
 }

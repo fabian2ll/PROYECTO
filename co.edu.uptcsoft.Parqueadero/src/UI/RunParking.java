@@ -66,7 +66,7 @@ public class RunParking {
 		do {
 			op=menu();
 		switch (op) {
-		case 1: 
+		case 0: 
 			
 			
 			 //mostrar matriz
@@ -134,7 +134,8 @@ case 4:
 	}
 
 	public static int menu() {
-		int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Ingreso de vehiculo \n 2.Inscripcion de mensualidades \n 3. Registro de vehiculos estacionados \n 4.Retirar vehiculo  ", "Menu de Opciones", 0, imagen, null, null));
+		String[] opciones = {" Ingreso de vehiculo", " Inscripcion de mensualidades"," Registro de vehiculos estacionados", " Retirar vehiculo"};
+		int opcionMenu = (int) JOptionPane.showInputDialog(null, "Elije una opción", "Menu de Opciones", 0, imagen, opciones, opciones[0]);
 	return opcionMenu;
 	}
 	
@@ -157,8 +158,7 @@ case 4:
 			}
 			
 			jefe = new Usuario(nombre, contraseña);
-			return "registro exitoso";
-			
+			return "registro exitoso";	
 		}while(true);
 		
 	}
@@ -194,26 +194,22 @@ case 4:
 		return "Ingreso exitoso";
 	}
 	
-	public static String registroMensualidades() {
-		
-		
-		return "Registro exitoso";
-		
-		
-		
+	public static String registroMensualidades() {	
+		return "Registro exitoso";	
 	}
+
 	public static void llenarArrays() {
 		for (int i=0; i<espaciosBicicletas.length; i++) {
 				espaciosBicicletas [i] = 0;
 			}
 		for (int i=0; i<espaciosMotos.length; i++) {
 			espaciosMotos [i] = 0;
-		}
+			}
 		for (int i=0; i<espaciosCarros.length; i++) {
 			espaciosCarros [i] = 0;
-		}
+			}
 		
-		}
+	}
 	
 	
 	/*public static void mostrarEspacios() {
@@ -233,6 +229,7 @@ public static int menuAdministrativo() {
 
 	return opcionMenu;
 }
+
 public static void  creacionObjeto (int opcion) {
 	switch (opcion) {
 	case 0: 

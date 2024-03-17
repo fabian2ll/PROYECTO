@@ -25,6 +25,8 @@ public class RunParking {
 	public static String [] opciones =  {"Bicicleta","Moto", "Automovil"};
 	public static int codigo=0;
 	public static LocalTime hora;
+	public static int costoMinutoCarroMoto;
+	public static int costoMinutoBici;
 	public static LinkedHashSet <Vehiculo> vehiculos = new LinkedHashSet<Vehiculo>();
 	public static LinkedHashSet <Contrato> contratos = new LinkedHashSet<Contrato>(); 
 	static ImageIcon imagen = new ImageIcon("co.edu.uptcsoft.Parqueadero\\src\\UI\\icono.png");
@@ -96,10 +98,24 @@ public class RunParking {
 			
 			break;
 		case 4: 
-			
+			switch (opcionesBusqueda()) {
+			case 1:
+				int codigoBuscado =Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
+				
+				break;
+			case 2: 
+				String placaBuscada = (String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
+				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoPlaca(vehiculos, contratos, placaBuscada, costoMinutoCarroMoto), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
 			break;
 		}
+		}
 		}while (op<5 | op>0); 
+
+	}
+
+	public static int opcionesBusqueda () {
+		
+		return Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escoja la forma en la que desea buscar su vehiculo \n 1.Codigo \n 2.Placa", "Retirar vehiculo", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
 
 	}
 
@@ -225,8 +241,8 @@ public static void  creacionObjeto (int opcion) {
 		codigo++;
 		espaciosDisponiblesBicicletas();
 		 hora= LocalTime.now();
-		 String horaLlegada = hora.toString();
-		Vehiculo bicicleta = new Vehiculo (opciones[0], AsignacionBici(), horaLlegada," ", codigo,50);
+		
+		Vehiculo bicicleta = new Vehiculo (opciones[0], AsignacionBici(), hora,hora, codigo,50);
 		vehiculos.add(bicicleta);
 		
 		break;
@@ -234,18 +250,18 @@ public static void  creacionObjeto (int opcion) {
 		espaciosDisponiblesMotos();
 		codigo++;
 		hora= LocalTime.now();
-		horaLlegada = hora.toString();
+		
 		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
-		Vehiculo moto = new Vehiculo (opciones[1],placa, AsignacionMoto(), horaLlegada, " ", codigo, 100 );
+		Vehiculo moto = new Vehiculo (opciones[1],placa, AsignacionMoto(), hora, hora, codigo, 100 );
 		vehiculos.add(moto);
 		break;
 	case 2: 
 		espaciosDisponiblesCarros();
 		codigo++;
 		hora= LocalTime.now();
-		horaLlegada = hora.toString();
+		
 		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
-		Vehiculo carro = new Vehiculo (opciones[2], placa, AsignacionCarro(), horaLlegada, " ", codigo, 150);
+		Vehiculo carro = new Vehiculo (opciones[2], placa, AsignacionCarro(), hora, hora, codigo, 150);
 		vehiculos.add(carro);
 		break;
 		

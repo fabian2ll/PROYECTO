@@ -60,29 +60,18 @@ public class RunParking {
 			break;
 		}
 	
-		int op=0;
+		char op;
 		
 		//eleccion del menu de opciones 
 		do {
-			op=menu();
+			op=menu().charAt(0);
 		switch (op) {
-		case 0: 
-			
-			
-			 //mostrar matriz
-		     ingresoVehiculo();
-		     
-		     
-		     
+		case 'E': 
+			ingresoVehiculo();
+		    break;
+		case 'I':		
 			break;
-		case 2:	
-			
-			
-			
-			
-			
-			break;
-		case 3: 
+		case 'R': 
 			
 			String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
 			int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
@@ -106,7 +95,7 @@ public class RunParking {
 			
 			
 			break;
-case 4: 
+		case 4: 
 			
 			break;
 		}
@@ -133,10 +122,10 @@ case 4:
 		}while(true);
 	}
 
-	public static int menu() {
-		String[] opciones = {" Ingreso de vehiculo", " Inscripcion de mensualidades"," Registro de vehiculos estacionados", " Retirar vehiculo"};
-		int opcionMenu = (int) JOptionPane.showInputDialog(null, "Elije una opción", "Menu de Opciones", 0, imagen, opciones, opciones[0]);
-	return opcionMenu;
+	public static String menu() {
+		String[] opciones = {"Entrada de vehiculo", "Inscripción de mensualidades","Registro de vehiculos estacionados", "Salida vehiculo"};
+		String opcionMenu =(String) JOptionPane.showInputDialog(null, "Elije una opción", "Menu de Opciones", 0, imagen, opciones, opciones[0]);
+		return opcionMenu;
 	}
 	
 	public static String registroJefe() {

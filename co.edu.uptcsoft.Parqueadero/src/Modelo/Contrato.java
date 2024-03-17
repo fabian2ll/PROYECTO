@@ -4,7 +4,7 @@ public class Contrato implements Comparable <Contrato> {
 	
 	//Atributos
 	
-	private String placa, identificacion, titular, tipoVehiculo,firma;
+	private String placa, identificacion, titular, tipoVehiculo, firma;
 	private int costo;
 
 

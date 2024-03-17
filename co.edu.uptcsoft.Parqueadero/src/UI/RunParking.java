@@ -76,29 +76,15 @@ public class RunParking {
 		    break;
 		case 'I':		
 			break;
-		case 'R':
-			
-			String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro", 0, imagen, null, null);
-			int contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Registro", 0, imagen, null, null));
-			if (sistema.verificarUsuario(jefe, nombre, contraseña)==true) {
-				switch (menuAdministrativo()) {
-				case 1:
-					// mostrar todos los vehiculos, incluyendo los de contrato si ingresaron en alguna hora
-					
-					
-					break;
-				case 2: 
-					//mostrar todos los contratos registrados con sus datos especificos
-					
-					
-					break;
-					
-				}
-			}else {
-				//mensaje de alerta, usuario incorrecto
+		
+		case 'V':
+			if(jefe==trabajador){
+				menuAdministrativo();
 			}
-			
-			
+			else{
+				JOptionPane.showMessageDialog(null, "Debes ser administrador");
+				cambiarUsuario();
+			}
 			break;
 		case 'S': 
 			switch (opcionesBusqueda()) {
@@ -123,6 +109,31 @@ public class RunParking {
 		return Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escoja la forma en la que desea buscar su vehiculo \n 1.Codigo \n 2.Placa", "Retirar vehiculo", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
 
 	}
+	public static void cambiarUsuario(){
+		String nombre = null;
+		int contraseña = 0;
+		do{
+			try {
+				nombre = (String) JOptionPane.showInputDialog(null, "Usuario Administrador", "Cambio de usuario", 0, imagen, null, null);
+				contraseña = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su contraseña", "Cambio de usuario", 0, imagen, null, null));
+				if (nombre == null || nombre.isEmpty() || contraseña <= 0) {
+					throw new Exception("Error: Usuario o contraseña invalidos");
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Error: Ingresa una contraseña valida", "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			} catch (Exception e){
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+			if(nombre.equals(jefe.getUsuario()) && contraseña == jefe.getContraseña()){
+				trabajador=jefe;
+				break;
+			}
+			
+			//return "registro exitoso";	
+		}while(true);
+	}
 
 	public static int verificarCantidadEspacios(String tipoVehiculo) {
 		int cantVehiculo = 0;
@@ -144,7 +155,7 @@ public class RunParking {
 	}
 
 	public static String menu() {
-		String[] opciones = {"Entrada de vehiculo", "Inscripción de mensualidades","Registro de vehiculos estacionados", "Salida vehiculo"};
+		String[] opciones = {"Entrada de vehiculo", "Inscripción de mensualidades","Ver registros", "Salida vehiculo"};
 		String opcionMenu =(String) JOptionPane.showInputDialog(null, "Elije una opción", "Menu de Opciones", 0, imagen, opciones, opciones[0]);
 		return opcionMenu;
 	}
@@ -234,11 +245,27 @@ public class RunParking {
 		JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios", 0, imagen);
 	}*/
 	
-public static int menuAdministrativo() {
-	int opcionMenu = Integer.parseInt((String) JOptionPane.showInputDialog(null, "1.Vehiculos ingresados \n 2.Contratos", "Menu de Opciones Administrativas", 0, imagen, null, null));
-
-	return opcionMenu;
-}
+	public static void menuAdministrativo() {
+		String[] opciones = {"Vehiculos", "Contratos"};
+		String opcionMenu = (String) JOptionPane.showInputDialog(null, "Elija una opción", "Menu de Opciones Administrativas", 0, imagen, opciones, opciones[0]);
+	
+		switch (opcionMenu) {
+			case "Vehiculos":
+				String vehiculosInfo = "Lista de Vehiculos:\n";
+				for (Vehiculo vehiculo : vehiculosTotales) {
+					vehiculosInfo += "Tipo: " + vehiculo.getTipo() + ", Placa: " + vehiculo.getPlaca() + ", Ubicacion: " + vehiculo.getUbicacion() + "\n";
+				}
+				JOptionPane.showMessageDialog(null, vehiculosInfo, "Vehiculos", JOptionPane.INFORMATION_MESSAGE);
+				break;
+			case "Contratos":
+				String contratosInfo = "Lista de Contratos:\n";
+				for (Contrato contrato : contratos) {
+					contratosInfo += "Vehiculo: " + contrato.getPlaca() + ", Usuario: " + contrato.getTitular() + ", Fecha de Inicio: " ; //+ contrato.getFechaInicio() + ", Fecha de Fin: " + contrato.getFechaFin() + "\n";
+				}
+				JOptionPane.showMessageDialog(null, contratosInfo, "Contratos", JOptionPane.INFORMATION_MESSAGE);
+				break;
+		}
+	}
 
 public static void  creacionObjeto (int opcion) {
 	switch (opcion) {

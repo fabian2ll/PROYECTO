@@ -7,6 +7,10 @@ private String usuario;
 private int contraseña;
 
 
+
+
+
+
 //constructores
 
 public Usuario() {

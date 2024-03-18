@@ -1,3 +1,2 @@
-COSAS POR HACER
 
-- Handle exceptions
+LISTO

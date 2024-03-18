@@ -32,6 +32,14 @@ public class Contrato implements Comparable <Contrato> {
 				+ ", tipoVehiculo= " + tipoVehiculo + ", costo= " + costo + ",firma: "+firma+"mes de inicio: "+mes+ "]";
 	}
 
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
 	//getters and setters
 	public String getPlaca() {
 		return placa;

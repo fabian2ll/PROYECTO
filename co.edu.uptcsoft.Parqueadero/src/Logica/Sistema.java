@@ -2,6 +2,8 @@ package Logica;
 
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import Modelo.Contrato;
 import Modelo.Usuario;
@@ -11,11 +13,11 @@ public class Sistema {
 	int posicion;
 	String tipo;
 
-	public int retirarVehiculoPlaca (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, String placa, int costoMinuto) {
+	public int retirarVehiculoPlaca (LinkedHashSet <Vehiculo> vehiculos ,LinkedHashSet<Vehiculo> vehiculosTotales, LinkedHashSet<Contrato> contratos, String placa, int costoMinuto) {
 		int precio=0;
 		long tiempo1, tiempo2;
 	
-		for (Vehiculo vehiculo: vehiculos) {
+		for (Vehiculo vehiculo: vehiculosTotales) {
 			if (placa.compareTo(vehiculo.getPlaca())==0) {
 				LocalTime horaSalida = LocalTime.now();
 				vehiculo.setHoraSalida(horaSalida);
@@ -25,20 +27,25 @@ public class Sistema {
 				vehiculo.setCosto(precio);
 				posicion = Integer.parseInt(vehiculo.getUbicacion().substring(1));
 				tipo = vehiculo.getTipo();
-			} else {
-				for (Contrato contrato: contratos) {
-					if (contrato.getPlaca().compareTo(placa)==0) {
-						precio=0;
-					}
+				vehiculos.remove(vehiculo);
+			} 
+			for (Contrato contrato: contratos) {
+				if (contrato.getPlaca().compareTo(placa)==0 ) {
+					precio=0;
+					vehiculo.setCosto(precio);
 				}
-			}
-		} 
+						
+			
+				}
+		
+		}
+		
 		return precio;
 	}
-	public int retirarVehiculoCodigo (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, int codigo, int costoMinuto) {
+	public int retirarVehiculoCodigo (LinkedHashSet <Vehiculo> vehiculos, LinkedHashSet<Vehiculo> vehiculosTotales, LinkedHashSet<Contrato> contratos, int codigo, int costoMinuto) {
 		int precio=0;
 		long tiempo1, tiempo2;
-		for (Vehiculo vehiculo: vehiculos) {
+		for (Vehiculo vehiculo: vehiculosTotales) {
 			if (codigo == vehiculo.getCodigo()) {
 				LocalTime horaSalida = LocalTime.now();
 				vehiculo.setHoraSalida(horaSalida);
@@ -48,15 +55,14 @@ public class Sistema {
 				vehiculo.setCosto(precio);
 				posicion = Integer.parseInt(vehiculo.getUbicacion().substring(1));
 				tipo = vehiculo.getTipo();
-			} for (Contrato contrato: contratos) {
-					if (contrato.getPlaca().compareTo(vehiculo.getPlaca())==0) {
+				vehiculos.remove(vehiculo);
+			} /*for (Contrato contrato: contratos) {
+					if (contrato.getCodigo().compareTo(vehiculo.getPlaca())==0) {
 						precio=0;
-					}
-			}
+					}*/
 		}
 		return precio;
 	}
-	
  public boolean verificarUsuario (Usuario jefe, String nombre, int contraseña) {
 	 return jefe.getUsuario().compareTo(nombre)== 0 && jefe.getContraseña() ==contraseña;
  }
@@ -148,5 +154,15 @@ public class Sistema {
 			break;
 		}
 			
+	}
+	//exepcion placa
+	public boolean  verificarPlaca(String placa) throws Exception {
+        // Definir el patrón para una placa en Colombia (tres letras seguidas de tres números)
+        Pattern pattern = Pattern.compile("[A-Z]{3}\\d{3}");
+        Matcher matcher = pattern.matcher(placa);
+        if (!matcher.matches()) {
+            throw new Exception("La placa ingresada es inválida");
+        }
+		return true;
 	}
 }

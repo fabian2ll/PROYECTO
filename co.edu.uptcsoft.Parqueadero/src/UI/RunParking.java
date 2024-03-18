@@ -1,6 +1,7 @@
 package UI;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 
 import javax.swing.ImageIcon;
@@ -92,12 +93,12 @@ public class RunParking {
 			switch (opcionesBusqueda()) {
 			case 1:
 				int codigoBuscado =Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba su codigo", "Busqueda Codigo", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null));
-				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoCodigo(vehiculosPresentes, contratos, codigoBuscado, costoMinutoBici), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
+				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoCodigo(vehiculosPresentes,vehiculosTotales, contratos, codigoBuscado, costoMinutoBici), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
 				sistema.actualizarArray(espaciosBicicletas, espaciosMotos, espaciosCarros);
 				break;
 			case 2: 
 				String placaBuscada = (String) JOptionPane.showInputDialog(null, "Escriba su placa", "Busqueda Placa", 0, new ImageIcon("C:\\Users\\USER\\eclipse-workspace\\co.edu.uptcsoft.Parqueadero\\src\\Logica\\icono.png"), null, null);
-				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoPlaca(vehiculosPresentes, contratos, placaBuscada, costoMinutoCarroMoto), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
+				JOptionPane.showMessageDialog(null, "PRECIO TOTAL: "+ sistema.retirarVehiculoPlaca(vehiculosPresentes,vehiculosTotales, contratos, placaBuscada, costoMinutoCarroMoto), "Factura", 0, new ImageIcon("file:///C:/Users/USER/git/proyecto/co.edu.uptcsoft.Parqueadero/src/Logica/icono.png"));
 				sistema.actualizarArray(espaciosBicicletas, espaciosMotos, espaciosCarros);
 			break;
 		}
@@ -300,23 +301,32 @@ public class RunParking {
 	}*/
 	
 	public static void menuAdministrativo() {
-		String[] opciones = {"Vehiculos", "Contratos"};
+		String[] opciones = {"Vehiculos", "Contratos" , "Vehiculos Actuales"};
 		String opcionMenu = (String) JOptionPane.showInputDialog(null, "Elija una opción", "Menu de Opciones Administrativas", 0, imagen, opciones, opciones[0]);
 	
 		switch (opcionMenu) {
 			case "Vehiculos":
 				String vehiculosInfo = "Lista de Vehiculos:\n";
+				DateTimeFormatter formatear = DateTimeFormatter.ofPattern("HH:mm");
 				for (Vehiculo vehiculo : vehiculosTotales) {
-					vehiculosInfo += "Tipo: " + vehiculo.getTipo() + ", Placa: " + vehiculo.getPlaca() + ", Ubicacion: " + vehiculo.getUbicacion() + "\n";
+					vehiculosInfo += "Tipo: " + vehiculo.getTipo() + ", Placa: " + vehiculo.getPlaca() + ", Ubicacion: " + vehiculo.getUbicacion() + ", precio: " + vehiculo.getCosto()+ ", Hora entrada: " + vehiculo.getHoraEntrada().format(formatear)+ ", Hora salida: " + vehiculo.getHoraSalida().format(formatear) +"\n";
 				}
 				JOptionPane.showMessageDialog(null, vehiculosInfo, "Vehiculos", JOptionPane.INFORMATION_MESSAGE);
 				break;
 			case "Contratos":
 				String contratosInfo = "Lista de Contratos:\n";
 				for (Contrato contrato : contratos) {
-					contratosInfo += "Vehiculo: " + contrato.getPlaca() + ", Usuario: " + contrato.getTitular() + ", Fecha de Inicio: " ; //+ contrato.getFechaInicio() + ", Fecha de Fin: " + contrato.getFechaFin() + "\n";
+					contratosInfo += "Vehiculo: " + contrato.getPlaca() + ", Usuario: " + contrato.getTitular() + ", Fecha de Inicio: 1 " +contrato.getMes() ; //+ contrato.getFechaInicio() + ", Fecha de Fin: " + contrato.getFechaFin() + "\n";
 				}
 				JOptionPane.showMessageDialog(null, contratosInfo, "Contratos", JOptionPane.INFORMATION_MESSAGE);
+				break;
+			case "Vehiculos Actuales":
+				String vehiculosactualesInfo = "Lista de Vehiculos:\n";
+				DateTimeFormatter truncar = DateTimeFormatter.ofPattern("HH:mm");
+				for (Vehiculo vehiculo : vehiculosPresentes) {
+					vehiculosactualesInfo += "Tipo: " + vehiculo.getTipo() + ", Placa: " + vehiculo.getPlaca() + ", Ubicacion: " + vehiculo.getUbicacion() + ", Hora entrada: " + vehiculo.getHoraEntrada().format(truncar) +"\n";
+				}
+				JOptionPane.showMessageDialog(null, vehiculosactualesInfo, "Vehiculos", JOptionPane.INFORMATION_MESSAGE);
 				break;
 		}
 	}
@@ -343,15 +353,29 @@ public static boolean creacionObjeto (int opcion) {
 		espaciosDisponiblesMotos();
 		codigo++;
 		hora= LocalTime.now();
+		boolean apreciacion =false;
 		if(!sistema.verificarEspacioDisponible(espaciosMotos)){
 			JOptionPane.showMessageDialog(null, "No hay espacios disponibles");
 			break;
 		}
+		do {
+		try {
 		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo moto = new Vehiculo (opciones[1],placa, sistema.AsignacionMoto(espaciosMotos), hora, hora, codigo, 0 );
+		
+		confirmacion = true;
+		apreciacion = sistema.verificarPlaca(placa.toUpperCase());
 		vehiculosPresentes.add(moto);
 		vehiculosTotales.add(moto);
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Alerta", 0, imagen);
+		}
+
+		}while(apreciacion ==false);
+
 		confirmacion = true;
+
 		break;
 	case 2: 
 		espaciosDisponiblesCarros();
@@ -361,17 +385,31 @@ public static boolean creacionObjeto (int opcion) {
 			JOptionPane.showMessageDialog(null, "No hay espacios disponibles");
 			break;
 		}
-		
-		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
+		 apreciacion = false;
+		do {
+		try {
+		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo carro = new Vehiculo (opciones[2], placa, sistema.AsignacionCarro(espaciosCarros), hora, hora, codigo, 150);
+		confirmacion=true;
+		apreciacion = sistema.verificarPlaca(placa.toUpperCase());
 		vehiculosPresentes.add(carro);
 		vehiculosTotales.add(carro);
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Alerta", 0, imagen);
+		}
+		
+		}while(apreciacion ==false);
+		
 		confirmacion=true;
+
 		break;
 		
 	}
 	return confirmacion;
-}
+	}
+	
+
 public static void espaciosDisponiblesBicicletas() {
 	String espaciosMostrar = " ";
 	for (int i=0; i< espaciosBicicletas.length; i++) {

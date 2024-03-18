@@ -75,7 +75,7 @@ public class RunParking {
 			JOptionPane.showMessageDialog(null, ingresoVehiculo(), "Verificacion", 0, imagen);
 		    break;
 		case 'I':		
-			
+			registroMensualidades();
 			
 			break;
 		
@@ -220,8 +220,19 @@ public class RunParking {
 	public static String registroMensualidades() {	
 		String placa= null, tipoVehiculo=null;
 		JOptionPane.showMessageDialog(null, "Para inscribirse a las mensualidades necesitamos los siguientes datos", "Observacion", 0, imagen);
-		String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro mensualidades", 0, imagen, null, null);
-		String identificacion = (String) JOptionPane.showInputDialog(null, "Escriba su numero de documento de identidad", "Registro mensualidades", 0, imagen, null, null);
+		String nombre = null, identificacion = null;
+		try{
+			nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro mensualidades", 0, imagen, null, null);
+			identificacion = (String) JOptionPane.showInputDialog(null, "Escriba su numero de documento de identidad", "Registro mensualidades", 0, imagen, null, null);
+			if (nombre == null || nombre.isEmpty() || identificacion.isEmpty()) {
+				throw new Exception("Error: Usuario o identificacion invalidos");
+			}
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Error: Ingresa una contraseña valida", "Error", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e){
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+
 		int tipo = JOptionPane.showOptionDialog(null, "Seleccione el tipo de vehiculo", "Registro mensualidades", 0,JOptionPane.QUESTION_MESSAGE, imagen, opciones,  "Bicicleta");
 		switch (tipo) {
 		case 0:
@@ -236,9 +247,24 @@ public class RunParking {
 			placa = (String) JOptionPane.showInputDialog(null, "Escriba la placa del vehiculo", "Registro mensualidades", 0, imagen, null, null);
 			break;
 		}
-		String mesInicio = (String) JOptionPane.showInputDialog(null, "Escriba el mes de inciio del contrato", "Registro mensualidades", 0, imagen, null, null);
-		int costoMensual = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el costo que asume el dueño del vehiculo", "Registro mensualidades", 0, imagen, null, null));
-		String firma = (String) JOptionPane.showInputDialog(null, "Escriba su firma", "Registro mensualidades", 0, imagen, null, null);
+		String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre","Octubre", "Noviembre", "Diciembre"};
+		String mesInicio = (String) JOptionPane.showInputDialog(null, "Escriba el mes de inciio del contrato", "Registro mensualidades", 0, imagen, meses, meses[0]);
+		int costoMensual = 0;
+		try{
+		costoMensual = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el costo que asume el dueño del vehiculo", "Registro mensualidades", 0, imagen, null, null));
+		} catch(NumberFormatException e){
+			JOptionPane.showMessageDialog(null, "Error: Ingresa un valor valido", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+
+		String firma = null;
+		try{
+			firma = (String) JOptionPane.showInputDialog(null, "Escriba su firma", "Registro mensualidades", 0, imagen, null, null);
+			if (!firma.matches("[a-zA-Z ]*")) {
+			throw new Exception("Error: La firma debe contener solo letras");
+			}
+		} catch(Exception e){
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		contratos.add(new Contrato(placa, identificacion, nombre, tipoVehiculo, costoMensual, firma, mesInicio));
 		return "Registro exitoso";	
 	}
@@ -296,8 +322,8 @@ public static void  creacionObjeto (int opcion) {
 	case 0: 
 		codigo++;
 		espaciosDisponiblesBicicletas();
-		 hora= LocalTime.now();
-		 JOptionPane.showMessageDialog(null, "Codigo: " + codigo, "Entrega Codigo", 0, imagen);
+		hora= LocalTime.now();
+		JOptionPane.showMessageDialog(null, "Codigo: " + codigo, "Entrega Codigo", 0, imagen);
 		Vehiculo bicicleta = new Vehiculo (opciones[0], sistema.AsignacionBici(espaciosBicicletas), hora,hora, codigo,0);
 		vehiculosPresentes.add(bicicleta);
 		vehiculosTotales.add(bicicleta);
@@ -334,6 +360,7 @@ public static void espaciosDisponiblesBicicletas() {
 	}
 	JOptionPane.showMessageDialog(null, espaciosMostrar, "Espacios Bicicletas", 0, imagen);
 }
+
 public static void espaciosDisponiblesMotos() {
 	String espaciosMostrar = " ";
 	for (int i=0; i< espaciosMotos.length; i++) {

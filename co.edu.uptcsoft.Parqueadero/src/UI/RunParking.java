@@ -213,8 +213,12 @@ public class RunParking {
 	public static String ingresoVehiculo() {
 		
 		int opcion = JOptionPane.showOptionDialog(null, "Seleccione el tipo de vehiculo", "Tipo de Vehiculo", 0,JOptionPane.QUESTION_MESSAGE, imagen, opciones,  "Bicicleta");
-		creacionObjeto(opcion);
-		return "Ingreso exitoso";
+		if(creacionObjeto(opcion)){
+			return "Ingreso exitoso";
+		}
+		else{
+			return "Error: No se puede ingresar";
+		}
 	}
 	
 	public static String registroMensualidades() {	
@@ -317,40 +321,56 @@ public class RunParking {
 		}
 	}
 
-public static void  creacionObjeto (int opcion) {
+public static boolean creacionObjeto (int opcion) {
+	boolean confirmacion = false; 
 	switch (opcion) {
 	case 0: 
 		codigo++;
 		espaciosDisponiblesBicicletas();
 		hora= LocalTime.now();
+		if(!sistema.verificarEspacioDisponible(espaciosBicicletas)){
+			JOptionPane.showMessageDialog(null, "No hay espacios disponibles");
+			break;
+		}
 		JOptionPane.showMessageDialog(null, "Codigo: " + codigo, "Entrega Codigo", 0, imagen);
 		Vehiculo bicicleta = new Vehiculo (opciones[0], sistema.AsignacionBici(espaciosBicicletas), hora,hora, codigo,0);
 		vehiculosPresentes.add(bicicleta);
 		vehiculosTotales.add(bicicleta);
+		confirmacion = true;
 		
 		break;
 	case 1: 
 		espaciosDisponiblesMotos();
 		codigo++;
 		hora= LocalTime.now();
-		
+		if(!sistema.verificarEspacioDisponible(espaciosMotos)){
+			JOptionPane.showMessageDialog(null, "No hay espacios disponibles");
+			break;
+		}
 		String placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo moto = new Vehiculo (opciones[1],placa, sistema.AsignacionMoto(espaciosMotos), hora, hora, codigo, 0 );
 		vehiculosPresentes.add(moto);
 		vehiculosTotales.add(moto);
+		confirmacion = true;
 		break;
 	case 2: 
 		espaciosDisponiblesCarros();
 		codigo++;
 		hora= LocalTime.now();
+		if(!sistema.verificarEspacioDisponible(espaciosCarros)){
+			JOptionPane.showMessageDialog(null, "No hay espacios disponibles");
+			break;
+		}
 		
 		placa = (String) JOptionPane.showInputDialog(null, "Digite la placa", "Placa", 0, imagen, null, null);
 		Vehiculo carro = new Vehiculo (opciones[2], placa, sistema.AsignacionCarro(espaciosCarros), hora, hora, codigo, 150);
 		vehiculosPresentes.add(carro);
 		vehiculosTotales.add(carro);
+		confirmacion=true;
 		break;
 		
 	}
+	return confirmacion;
 }
 public static void espaciosDisponiblesBicicletas() {
 	String espaciosMostrar = " ";

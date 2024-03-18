@@ -10,6 +10,7 @@ import Modelo.Vehiculo;
 public class Sistema {
 	int posicion;
 	String tipo;
+
 	public int retirarVehiculoPlaca (LinkedHashSet<Vehiculo> vehiculos, LinkedHashSet<Contrato> contratos, String placa, int costoMinuto) {
 		int precio=0;
 		long tiempo1, tiempo2;
@@ -59,22 +60,39 @@ public class Sistema {
  public boolean verificarUsuario (Usuario jefe, String nombre, int contraseña) {
 	 return jefe.getUsuario().compareTo(nombre)== 0 && jefe.getContraseña() ==contraseña;
  }
+
+ public boolean verificarEspacioDisponible(int[] vectorEspacios){
+	boolean disponible = false;
+	for (int i : vectorEspacios) {
+		if(i==0){
+			disponible=true;
+		}
+ 	}
+	return disponible;
+ }
+
  public  String AsignacionCarro(int [] espaciosCarros) {
-		String ubicacion= " ";
-		if (espaciosCarros[espaciosCarros.length-1]==1) {
-			System.out.println("no hay");
-		}
-		for (int i=0; i<espaciosCarros.length; i++) {
-			if (espaciosCarros[i]==0) {
-				ubicacion = "A"+i;
-				espaciosCarros[i]=1;
-			} 
-			if ((i=espaciosCarros.length-1)==1) {
-				return "No existe un espacio disponible";
+		if(verificarEspacioDisponible(espaciosCarros)) {
+			String ubicacion= " ";
+			if (espaciosCarros[espaciosCarros.length-1]==1) {
+				System.out.println("no hay");
 			}
+			for (int i=0; i<espaciosCarros.length; i++) {
+				if (espaciosCarros[i]==0) {
+					ubicacion = "A"+i;
+					espaciosCarros[i]=1;
+				} 
+				if ((i=espaciosCarros.length-1)==1) {
+					return "No existe un espacio disponible";
+				}
+			}
+			return ubicacion;
 		}
-		return ubicacion;
+		else{
+			return "No hay espacio disponible";
+		}
 	}
+
 	public  String AsignacionBici(int [] espaciosBicicletas) {
 		String ubicacion = null;
 

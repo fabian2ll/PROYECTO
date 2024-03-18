@@ -4,18 +4,16 @@ public class Contrato implements Comparable <Contrato> {
 	
 	//Atributos
 	
-	private String placa, identificacion, titular, tipoVehiculo, firma;
+	private String placa, identificacion, titular, tipoVehiculo, firma, mes;
 	private int costo;
 
 
 	//constructores
 
-	public Contrato() {
-		super();
-	}
+	
 
 
-	public Contrato(String placa, String identificacion, String titular, String tipoVehiculo, int costo,String firma) {
+	public Contrato(String placa, String identificacion, String titular, String tipoVehiculo, int costo,String firma, String mes) {
 		super();
 		this.placa = placa;
 		this.identificacion = identificacion;
@@ -23,17 +21,16 @@ public class Contrato implements Comparable <Contrato> {
 		this.tipoVehiculo = tipoVehiculo;
 		this.costo = costo;
 		this.firma=firma;
+		this.mes= mes;
 	}
 
 	//to String
 
 	@Override
 	public String toString() {
-		return "Contrato [placa=" + placa + ", identificacion=" + identificacion + ", titular=" + titular
-				+ ", tipoVehiculo=" + tipoVehiculo + ", costo=" + costo + "]";
+		return "Contrato [placa= " + placa + ", identificacion= " + identificacion + ", titular= " + titular
+				+ ", tipoVehiculo= " + tipoVehiculo + ", costo= " + costo + ",firma: "+firma+"mes de inicio: "+mes+ "]";
 	}
-
-
 
 	//getters and setters
 	public String getPlaca() {

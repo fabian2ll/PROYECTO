@@ -13,10 +13,10 @@ public class Vehiculo  {
 	
 	
 	
-	@Override
+	/*@Override
 	public int hashCode() {
 		return Objects.hash(placa);
-	}
+	}*/
 
 	@Override
 	public boolean equals(Object obj) {

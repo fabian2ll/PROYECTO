@@ -11,7 +11,7 @@ import Logica.Sistema;
 import Modelo.Contrato;
 import Modelo.Usuario;
 import Modelo.Vehiculo;
-//contra repositorio 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
+//contra repositorio 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
 public class RunParking {
 
 	
@@ -75,6 +75,8 @@ public class RunParking {
 			JOptionPane.showMessageDialog(null, ingresoVehiculo(), "Verificacion", 0, imagen);
 		    break;
 		case 'I':		
+			
+			
 			break;
 		
 		case 'V':
@@ -216,6 +218,28 @@ public class RunParking {
 	}
 	
 	public static String registroMensualidades() {	
+		String placa= null, tipoVehiculo=null;
+		JOptionPane.showMessageDialog(null, "Para inscribirse a las mensualidades necesitamos los siguientes datos", "Observacion", 0, imagen);
+		String nombre = (String) JOptionPane.showInputDialog(null, "Escriba el nombre del usuario a registrar", "Registro mensualidades", 0, imagen, null, null);
+		String identificacion = (String) JOptionPane.showInputDialog(null, "Escriba su numero de documento de identidad", "Registro mensualidades", 0, imagen, null, null);
+		int tipo = JOptionPane.showOptionDialog(null, "Seleccione el tipo de vehiculo", "Registro mensualidades", 0,JOptionPane.QUESTION_MESSAGE, imagen, opciones,  "Bicicleta");
+		switch (tipo) {
+		case 0:
+			 tipoVehiculo = opciones[0];
+			break;
+		case 1:
+			tipoVehiculo = opciones[1];
+			 placa = (String) JOptionPane.showInputDialog(null, "Escriba la placa del vehiculo", "Registro mensualidades", 0, imagen, null, null);
+			break;
+		case 2:
+			tipoVehiculo = opciones[2];
+			placa = (String) JOptionPane.showInputDialog(null, "Escriba la placa del vehiculo", "Registro mensualidades", 0, imagen, null, null);
+			break;
+		}
+		String mesInicio = (String) JOptionPane.showInputDialog(null, "Escriba el mes de inciio del contrato", "Registro mensualidades", 0, imagen, null, null);
+		int costoMensual = Integer.parseInt((String) JOptionPane.showInputDialog(null, "Escriba el costo que asume el dueño del vehiculo", "Registro mensualidades", 0, imagen, null, null));
+		String firma = (String) JOptionPane.showInputDialog(null, "Escriba su firma", "Registro mensualidades", 0, imagen, null, null);
+		contratos.add(new Contrato(placa, identificacion, nombre, tipoVehiculo, costoMensual, firma, mesInicio));
 		return "Registro exitoso";	
 	}
 

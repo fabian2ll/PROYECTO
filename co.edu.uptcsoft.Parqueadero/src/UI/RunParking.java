@@ -314,7 +314,7 @@ public class RunParking {
 			case "Contratos":
 				String contratosInfo = "Lista de Contratos:\n";
 				for (Contrato contrato : contratos) {
-					contratosInfo += "Vehiculo: " + contrato.getPlaca() + ", Usuario: " + contrato.getTitular() + ", Fecha de Inicio: " ; //+ contrato.getFechaInicio() + ", Fecha de Fin: " + contrato.getFechaFin() + "\n";
+					contratosInfo += "Vehiculo: " + contrato.getPlaca() + ", Usuario: " + contrato.getTitular();// + ", Fecha de Inicio: " ; + contrato.getFechaInicio() + ", Fecha de Fin: " + contrato.getFechaFin() + "\n";
 				}
 				JOptionPane.showMessageDialog(null, contratosInfo, "Contratos", JOptionPane.INFORMATION_MESSAGE);
 				break;
